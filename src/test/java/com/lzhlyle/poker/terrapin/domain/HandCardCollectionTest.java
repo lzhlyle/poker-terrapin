@@ -30,7 +30,7 @@ public class HandCardCollectionTest {
         HandCardCollection handCardCollection = new HandCardCollection(dealer.deal(cards, 4));
         System.out.println(handCardCollection.toString());
 
-        handCardCollection.adjust(2);
+        handCardCollection.adjust();
         System.out.println(handCardCollection.toString());
     }
 }

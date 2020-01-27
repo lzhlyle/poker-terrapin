@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class PlayerTest {
+public class AbstractPlayerTest {
 
     @Test
     public void receive() {
@@ -15,8 +15,8 @@ public class PlayerTest {
         PokerDealer dealer = PokerDealer.getInstance();
         dealer.shuffle(cards);
 
-        Player player = new Player("MY", 1);
-        player.receive(dealer.deal(cards, 4));
+        AbstractPlayer abstractPlayer = new Player("MY");
+        abstractPlayer.receive(dealer.deal(cards, 4));
     }
 
     @Test
@@ -25,17 +25,17 @@ public class PlayerTest {
         PokerDealer dealer = PokerDealer.getInstance();
         dealer.shuffle(cards);
 
-        Player player = new Player("SC", 2);
-        player.receive(dealer.deal(cards, 4));
-        System.out.println(player.getHandCard());
+        AbstractPlayer abstractPlayer = new Banker("SC");
+        abstractPlayer.receive(dealer.deal(cards, 4));
+        System.out.println(abstractPlayer.getHandCard());
 
-        player.adjust();
-        System.out.println(player.getHandCard());
+        abstractPlayer.adjust();
+        System.out.println(abstractPlayer.getHandCard());
 
-        player.adjust();
-        System.out.println(player.getHandCard());
+        abstractPlayer.adjust();
+        System.out.println(abstractPlayer.getHandCard());
 
-        player.adjust();
-        System.out.println(player.getHandCard());
+        abstractPlayer.adjust();
+        System.out.println(abstractPlayer.getHandCard());
     }
 }

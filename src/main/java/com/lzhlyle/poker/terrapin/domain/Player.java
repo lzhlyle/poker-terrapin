@@ -1,38 +1,28 @@
 package com.lzhlyle.poker.terrapin.domain;
 
-import com.lzhlyle.poker.utility.card.PokerCard;
-
-import java.util.List;
-
-public class Player {
-    private String name;
-    private int sort;
-    private HandCardCollection handCard;
-
-    public Player(String name, int sort) {
-        this.name = name;
-        this.sort = sort;
-        this.handCard = null;
+public class Player extends AbstractPlayer {
+    public Player(String name) {
+        super(name);
     }
 
-    public void receive(List<PokerCard> cards) {
-        this.handCard = new HandCardCollection(cards);
+    public void sitDown(Game game) {
+        game.addPlayer(this);
+        super.setGame(game);
     }
 
-    public void adjust() {
-        int i = handCard.getIndexWithFirst();
-        handCard.adjust(i == 3 ? 1 : i + 1);
+    public void leave() {
+        super.getGame().removePlayer(this);
+        super.setGame(null);
     }
 
-    public String getName() {
-        return name;
+    // 开牌
+    public String turnOver() {
+        super.getHandCard().lock();
+        return super.getHandCard().toString();
     }
 
-    public int getSort() {
-        return sort;
-    }
-
-    public HandCardCollection getHandCard() {
-        return handCard;
+    // 盖牌
+    public void turnCover() {
+        super.getHandCard().lock();
     }
 }

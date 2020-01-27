@@ -85,4 +85,12 @@ public class PokerCard {
                 return String.valueOf(value);
         }
     }
+
+    public int getColor() {
+        return color;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

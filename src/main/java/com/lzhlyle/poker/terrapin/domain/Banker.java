@@ -1,7 +1,22 @@
 package com.lzhlyle.poker.terrapin.domain;
 
-public class Banker extends Player {
+public class Banker extends AbstractPlayer {
     public Banker(String name) {
-        super(name, 0);
+        super(name);
+        super.setGame(new Game(this));
+    }
+
+    public void round() {
+        new GameRound(super.getGame()).start();
+    }
+
+    // 杀
+    public void kill() {
+
+    }
+
+    // 走过
+    public void pass() {
+
     }
 }
