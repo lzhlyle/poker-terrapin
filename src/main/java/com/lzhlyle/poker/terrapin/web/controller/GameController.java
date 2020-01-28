@@ -72,4 +72,10 @@ public class GameController {
         player.turnOver();
         return new WiselyResponse("【" + name + "】选择开牌：" + player.getHandCardStr());
     }
+
+    @MessageMapping("/rec")
+    @SendTo({"/topic/log"})
+    public WiselyResponse rec(WiselyMessage message) {
+        return new WiselyResponse("【" + message.getName() + "】记录：" + message.getMsg() + " =========");
+    }
 }

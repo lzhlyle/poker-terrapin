@@ -28,6 +28,14 @@
         <hr/>
         <div id="dv-players"></div>
         <hr/>
+        <form class="form-inline" id="fm-rec">
+            <div class="form-group">
+                <input type="text" class="form-control" id="txt-rec" placeholder="欠酒备忘录">
+            </div>
+            <button type="button" class="btn btn-default" onclick="rec()">发送</button>
+            <button type="reset" class="btn btn-default">清空</button>
+        </form>
+        <hr/>
         <div id="dv-log"></div>
     </div>
 </div>
@@ -107,7 +115,7 @@
         var playersTxt = '在线玩家：';
         for (var i = 0, len = players.length; i < len; i++) {
             var player = players[i];
-            playersTxt += player.name + ' ';
+            playersTxt += '【' + player.name + '】 ';
 
             if (!!player.handCardStr && player.name === getName()) {
                 var handCardStr = '您的手牌：' + player.handCardStr;
@@ -140,6 +148,13 @@
     function turnOver() {
         stompClient.send('/turnOver', {}, JSON.stringify({
             'name': getName()
+        }));
+    }
+
+    function rec() {
+        stompClient.send('/rec', {}, JSON.stringify({
+            'name': getName(),
+            'msg': $('#txt-rec').val()
         }));
     }
 </script>
