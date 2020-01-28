@@ -76,6 +76,6 @@ public class GameController {
     @MessageMapping("/rec")
     @SendTo({"/topic/log"})
     public WiselyResponse rec(WiselyMessage message) {
-        return new WiselyResponse("【" + message.getName() + "】记录：" + message.getMsg() + " =========");
+        return new WiselyResponse("【" + message.getName() + "】记录：" + message.getMsg());
     }
 }

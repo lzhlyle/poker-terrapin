@@ -12,7 +12,7 @@
     <h1>Nanning Poker Terrapin</h1>
     <form class="form-inline" id="fm-login">
         <div class="form-group">
-            <input type="text" class="form-control" id="txt-name" placeholder="来者何人">
+            <input type="text" class="form-control" id="txt-name" placeholder="来者何人" autocomplete="off">
         </div>
         <button type="button" class="btn btn-default" onclick="login()">躬身入局</button>
     </form>
@@ -30,10 +30,9 @@
         <hr/>
         <form class="form-inline" id="fm-rec">
             <div class="form-group">
-                <input type="text" class="form-control" id="txt-rec" placeholder="欠酒备忘录">
+                <input type="text" class="form-control" id="txt-rec" placeholder="说点儿什么" autocomplete="off">
             </div>
             <button type="button" class="btn btn-default" onclick="rec()">发送</button>
-            <button type="reset" class="btn btn-default">清空</button>
         </form>
         <hr/>
         <div id="dv-log"></div>
@@ -152,10 +151,12 @@
     }
 
     function rec() {
+        var $rec = $('#txt-rec');
         stompClient.send('/rec', {}, JSON.stringify({
             'name': getName(),
-            'msg': $('#txt-rec').val()
+            'msg': $rec.val()
         }));
+        $rec.val('');
     }
 </script>
 </body>
