@@ -1,0 +1,17 @@
+server:
+    port: 62020
+    context-path: /
+    
+info:
+    app.name: com.lzhlyle.poker.terrapin
+    company.name: lzhlyle.com
+    build.artifactId: $project.artifactId$
+    build.version: $project.verson$
+
+spring:
+  jmx:
+    default-domain: terrapin
+  application:
+    name: poker-terrapin
+  thymeleaf:
+    cache: false
