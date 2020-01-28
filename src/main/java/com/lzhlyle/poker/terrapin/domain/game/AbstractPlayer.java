@@ -15,16 +15,22 @@ public abstract class AbstractPlayer {
         this.game = null;
     }
 
+    // 接牌
     public void receive(List<PokerCard> cards) {
         this.handCard = new HandCardCollection(cards);
     }
 
+    // 摆牌
     public void adjust() {
         handCard.adjust();
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getHandCardStr() {
+        return handCard == null ? null : handCard.toString();
     }
 
     public HandCardCollection getHandCard() {

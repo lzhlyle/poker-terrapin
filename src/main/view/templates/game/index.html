@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nanning Poker Terrapin</title>
+    <link rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap-theme.css}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Nanning Poker Terrapin</h1>
+    <form class="form-inline" id="fm-login">
+        <div class="form-group">
+            <input type="text" class="form-control" id="txt-name" placeholder="来者何人">
+        </div>
+        <button type="button" class="btn btn-default" onclick="login()">躬身入局</button>
+    </form>
+    <div id="dv-game" style="display: none">
+        <h2><span id="sp-name"></span> Go!</h2>
+        <button type="button" class="btn btn-default" onclick="start()">发牌走起</button>
+        <button type="button" class="btn btn-default" onclick="adjust()">摆牌</button>
+        <button type="button" class="btn btn-default" onclick="turnOver()">开牌</button>
+        <button type="button" class="btn btn-default" onclick="clearLog()">长岛冰茶</button>
+        <button type="button" class="btn btn-default" onclick="logout()">下次再来</button>
+        <hr/>
+        <div id="dv-my"></div>
+        <hr/>
+        <div id="dv-players"></div>
+        <hr/>
+        <div id="dv-log"></div>
+    </div>
+</div>
+
+<script th:src="@{/js/jquery.js}" type="text/javascript"></script>
+<script th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/stomp.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/sockjs.min.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    var stompClient = null;
+
+    (function () {
+        connect();
+    })();
+
+    function connect() {
+        var socket = new SockJS('/terrapin');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            // console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/log', function (response) {
+                // console.log(JSON.parse(response.body).responseMessage);
+                var txt = JSON.parse(response.body).message;
+                appendLog(txt);
+            });
+            stompClient.subscribe('/topic/players', function (response) {
+                // console.log(JSON.parse(response.body).responseMessage);
+                var players = JSON.parse(response.body).players;
+                refreshPlayers(players);
+            });
+        });
+    }
+
+    function login() {
+        var name = getName();
+        if (!name) {
+            alert('来者何人!');
+            return;
+        }
+
+        stompClient.send('/login', {}, JSON.stringify({
+            'name': name
+        }));
+
+        $('#sp-name').html(name);
+        $('#dv-game').show();
+        $('#fm-login').hide();
+    }
+
+    function logout() {
+        stompClient.send('/logout', {}, JSON.stringify({
+            'name': getName()
+        }));
+
+        disconnect();
+
+        location.reload();
+    }
+
+    function disconnect() {
+        if (!stompClient) {
+            stompClient.disconnect();
+        }
+    }
+
+    function getName() {
+        return $('#txt-name').val();
+    }
+
+    function clearLog() {
+        $('#dv-log').html('');
+    }
+
+    function refreshPlayers(players) {
+        if (!players) return;
+
+        var playersTxt = '在线玩家：';
+        for (var i = 0, len = players.length; i < len; i++) {
+            var player = players[i];
+            playersTxt += player.name + ' ';
+
+            if (!!player.handCardStr && player.name === getName()) {
+                var handCardStr = '您的手牌：' + player.handCardStr;
+                $('#dv-my').html('<h3>' + handCardStr + '</h3>');
+            }
+        }
+        $('#dv-players').html('<h4>' + playersTxt + '</h4>');
+    }
+
+    function appendLog(txt) {
+        if (!txt) return;
+
+        var p = $('<p class="text-left"></p>');
+        p.html(txt);
+        $('#dv-log').prepend(p);
+    }
+
+    function start() {
+        stompClient.send('/start', {}, JSON.stringify({
+            'name': getName()
+        }));
+    }
+
+    function adjust() {
+        stompClient.send('/adjust', {}, JSON.stringify({
+            'name': getName()
+        }));
+    }
+
+    function turnOver() {
+        stompClient.send('/turnOver', {}, JSON.stringify({
+            'name': getName()
+        }));
+    }
+</script>
+</body>
+</html>

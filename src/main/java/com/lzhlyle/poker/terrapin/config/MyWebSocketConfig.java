@@ -13,6 +13,7 @@ public class MyWebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 注册STOMP协议节点，指定url，使用SockJS协议
         registry.addEndpoint("/endpointWisely").withSockJS();
+        registry.addEndpoint("/terrapin").withSockJS();
     }
 
     @Override

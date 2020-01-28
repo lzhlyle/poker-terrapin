@@ -53,4 +53,12 @@ public class PairCard {
                 ", " + b +
                 '}';
     }
+
+    public PokerCard getA() {
+        return a;
+    }
+
+    public PokerCard getB() {
+        return b;
+    }
 }
