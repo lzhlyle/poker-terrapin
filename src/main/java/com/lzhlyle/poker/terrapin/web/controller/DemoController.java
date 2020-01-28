@@ -13,11 +13,11 @@ public class DemoController {
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public Object index(Model model, HttpServletRequest request) {
-        return "/demo/index";
+        return "demo/index";
     }
 
     @RequestMapping(path = "/ws", method = RequestMethod.GET)
     public String ws(Model model, HttpServletRequest request) {
-        return "/demo/ws";
+        return "demo/ws";
     }
 }

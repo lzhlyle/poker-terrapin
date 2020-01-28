@@ -20,7 +20,7 @@ public class GameController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String index(Model model, HttpServletRequest request) {
-        return "/game/index";
+        return "game/index";
     }
 
     @MessageMapping("/login") // 路径映射
