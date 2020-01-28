@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Spring Boot WebSocket 广播式</title>
+</head>
+<body>
+
+	<script th:src="@{/js/jquery.js}" type="text/javascript"></script>
+	<script th:src="@{/js/stomp.min.js}" type="text/javascript"></script>
+	<script th:src="@{/js/sockjs.min.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+		var stompClient = null;
+
+		function connect() {
+			var socket = new SockJS('/endpointWisely');
+			stompClient = Stomp.over(socket);
+			stompClient.connect({}, function(frame) {
+				console.log('Connected: ' + frame);
+				stompClient.subscribe('/topic/getResponse', function(response) {
+					console.log(JSON.parse(response.body).responseMessage);
+				});
+			});
+		}
+
+		function disconnect() {
+			if (!stompClient) {
+				stompClient.disconnect();
+			}
+		}
+
+		function setName(name) {
+			stompClient.send('/welcome', {}, JSON.stringify({
+				'name' : name
+			}));
+		}
+	</script>
+</body>
+</html>

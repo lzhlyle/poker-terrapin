@@ -1,4 +1,4 @@
-package com.lzhlyle.poker.terrapin.domain;
+package com.lzhlyle.poker.terrapin.domain.game;
 
 import com.lzhlyle.poker.utility.card.PokerCard;
 

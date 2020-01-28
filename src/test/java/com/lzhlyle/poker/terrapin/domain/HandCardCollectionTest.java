@@ -1,5 +1,6 @@
 package com.lzhlyle.poker.terrapin.domain;
 
+import com.lzhlyle.poker.terrapin.domain.game.HandCardCollection;
 import com.lzhlyle.poker.utility.card.PokerBox;
 import com.lzhlyle.poker.utility.card.PokerCard;
 import com.lzhlyle.poker.utility.dealer.PokerDealer;

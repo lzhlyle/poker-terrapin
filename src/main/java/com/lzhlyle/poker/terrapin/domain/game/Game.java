@@ -1,8 +1,7 @@
-package com.lzhlyle.poker.terrapin.domain;
+package com.lzhlyle.poker.terrapin.domain.game;
 
 import com.lzhlyle.poker.utility.card.PokerBox;
 import com.lzhlyle.poker.utility.card.PokerCard;
-import com.lzhlyle.poker.utility.dealer.PokerDealer;
 
 import java.util.LinkedList;
 import java.util.List;

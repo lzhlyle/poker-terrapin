@@ -1,4 +1,4 @@
-package com.lzhlyle.poker.terrapin.domain;
+package com.lzhlyle.poker.terrapin.domain.game;
 
 public class Banker extends AbstractPlayer {
     public Banker(String name) {
