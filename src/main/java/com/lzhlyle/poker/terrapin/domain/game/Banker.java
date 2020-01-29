@@ -10,7 +10,12 @@ public class Banker extends AbstractPlayer {
 
     public Banker(String name) {
         super(name);
-//        super.setGame(new Game(this));
+        this.status = BankerStatusEnum.WAITING;
+        this.count = 0;
+    }
+
+    public Banker(String name, int scoreVal) {
+        super(name, scoreVal);
         this.status = BankerStatusEnum.WAITING;
         this.count = 0;
     }

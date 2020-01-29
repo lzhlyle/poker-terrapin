@@ -232,7 +232,7 @@ public class GameController {
         if (banker.open())
             return new WiselyResponse(name, "庄家开牌 " + banker.getHandCardStr());
 
-        return new WiselyResponse(name, "计分 +1");
+        return new WiselyResponse(name, null);
     }
 
 
@@ -245,7 +245,7 @@ public class GameController {
 
         player.increaseScore(1);
 
-        return new WiselyResponse(name, "计分 -1");
+        return new WiselyResponse(name, "计分 +1，总计 " + player.getScore().getValue());
     }
 
     @MessageMapping("/lose")
@@ -257,6 +257,6 @@ public class GameController {
 
         player.decreaseScore(1);
 
-        return new WiselyResponse(name, null);
+        return new WiselyResponse(name, "计分 -1，总计 " + player.getScore().getValue());
     }
 }

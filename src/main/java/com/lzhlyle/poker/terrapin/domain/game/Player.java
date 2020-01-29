@@ -12,6 +12,11 @@ public class Player extends AbstractPlayer {
         this.status = PlayerStatusEnum.WAITING;
     }
 
+    public Player(String name, int scoreVal) {
+        super(name, scoreVal);
+        this.status = PlayerStatusEnum.WAITING;
+    }
+
     @Override
     public void receive(List<PokerCard> cards) {
         super.receive(cards);

@@ -43,7 +43,8 @@
         <hr />
         <form class="form-inline" id="fm-rec">
             <div class="form-group">
-                <input type="text" class="form-control" id="txt-msg" placeholder="说点儿什么" autocomplete="off">
+                <input type="text" class="form-control" id="txt-msg" placeholder="说点儿什么" autocomplete="off"
+                onkeypress="if (event.keyCode === 13) return false;">
             </div>
             <button type="button" class="btn btn-default" id="btn-msg">恭喜发财</button>
             <button type="button" class="btn btn-default" id="btn-clearLog">长岛冰茶</button>

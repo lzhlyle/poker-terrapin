@@ -18,6 +18,13 @@ public abstract class AbstractPlayer {
         this.score = new Score(0);
     }
 
+    public AbstractPlayer(String name, int scoreVal) {
+        this.name = name;
+        this.handCard = null;
+        this.game = null;
+        this.score = new Score(scoreVal);
+    }
+
     // 接牌
     public void receive(List<PokerCard> cards) {
         this.handCard = new HandCardCollection(cards);

@@ -32,14 +32,15 @@ public class SimpleGame {
         if (banker != null && !Objects.equals(banker.getName(), name)) {
             // banker -> player
             String oriBankerName = banker.getName();
+            int oriScoreVal = banker.getScore().getValue();
             banker = null;
-            addPlayer(oriBankerName);
+            addPlayer(oriBankerName, oriScoreVal);
         }
 
         if (banker == null) {
             // player -> banker
-            removePlayer(name);
-            banker = new Banker(name);
+            AbstractPlayer ab = removePlayer(name);
+            banker = new Banker(name, ab.getScore().getValue());
         }
 
         List<AbstractPlayer> abstractPlayers = getAbstractPlayers();
@@ -56,14 +57,19 @@ public class SimpleGame {
     }
 
     public void addPlayer(String name) {
-        if (getAbstractPlayers().stream().anyMatch(p -> Objects.equals(p.getName(), name))) return;
-        players.add(new Player(name));
+        addPlayer(name, 0);
     }
 
-    public void removePlayer(String name) {
+    public void addPlayer(String name, int scoreVal) {
+        if (getAbstractPlayers().stream().anyMatch(p -> Objects.equals(p.getName(), name))) return;
+        players.add(new Player(name, scoreVal));
+    }
+
+    public AbstractPlayer removePlayer(String name) {
         AbstractPlayer player = findAbstractPlayer(name);
         if (player instanceof Player) players.remove(player);
         if (player instanceof Banker) banker = null;
+        return player;
     }
 
     public List<Player> getPlayers() {
