@@ -33,10 +33,11 @@ public class HandCardCollection {
         tail = p1;
     }
 
-    public void adjust() {
-        if (isLock) return;
+    public boolean adjust() {
+        if (isLock) return false;
         int i = indexWithFirst;
         this._adjust(i == 3 ? 1 : i + 1);
+        return true;
     }
 
     private void _adjust(int indexWithFirst) {

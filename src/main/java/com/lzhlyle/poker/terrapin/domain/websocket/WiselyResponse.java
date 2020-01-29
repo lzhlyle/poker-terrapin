@@ -1,24 +1,37 @@
 package com.lzhlyle.poker.terrapin.domain.websocket;
 
-import com.lzhlyle.poker.terrapin.domain.game.Player;
+import com.lzhlyle.poker.terrapin.domain.game.AbstractPlayer;
+import com.lzhlyle.poker.terrapin.domain.game.Banker;
 import com.lzhlyle.poker.terrapin.domain.game.SimpleGame;
 
 import java.util.List;
 
 public class WiselyResponse {
+    private String name;
     private String message;
-    private List<Player> players;
+    private Banker banker;
+    private List<AbstractPlayer> players;
 
-    public WiselyResponse(String message) {
+    public WiselyResponse(String name, String message) {
+        this.name = name;
         this.message = message;
-        this.players = SimpleGame.getInstance().getPlayers();
+        this.banker = SimpleGame.getInstance().getBanker();
+        this.players = SimpleGame.getInstance().getAbstractPlayers();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public List<Player> getPlayers() {
+    public List<AbstractPlayer> getPlayers() {
         return players;
+    }
+
+    public Banker getBanker() {
+        return banker;
     }
 }

@@ -12,6 +12,6 @@ public class WcController {
     @SendTo("/topic/getResponse") // 当服务端有消息时，会对订阅了@SendTo中的路径的浏览器发送消息
     public WiselyResponse say(WiselyMessage message) throws InterruptedException {
         Thread.sleep(500);
-        return new WiselyResponse(message.getName() + " 已加入");
+        return new WiselyResponse(message.getName(), "已加入");
     }
 }
