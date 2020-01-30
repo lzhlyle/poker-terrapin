@@ -1,6 +1,8 @@
 var index = (function () {
     var self = {};
     var $name;
+    var $room;
+    var _login = false;
     var stompClient = null;
 
     self.init = function (fn) {
@@ -12,18 +14,32 @@ var index = (function () {
         var socket = new SockJS('/terrapin');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/login', function (response) {
+                var data = JSON.parse(response.body);
+                if (data.room === $room) {
+                    if (!data.message) {
+                        _login = false;
+                        alert('邀请码错误');
+                    } else _login = true;
+                }
+            });
+
             stompClient.subscribe('/topic/log', function (response) {
                 var data = JSON.parse(response.body);
-                if (data.chat) {
-                    appendChat(data.name, data.message);
-                } else {
-                    appendLog(data.name, data.message);
+                if (data.room === $room) {
+                    if (data.chat) {
+                        appendChat(data.name, data.message);
+                    } else {
+                        appendLog(data.name, data.message);
+                    }
                 }
             });
 
             stompClient.subscribe('/topic/players', function (response) {
                 var data = JSON.parse(response.body);
-                refreshPlayers(data.players, data.banker);
+                if (data.room === $room) {
+                    refreshPlayers(data.players, data.banker);
+                }
             });
         });
 
@@ -126,8 +142,7 @@ var index = (function () {
                 // 庄家行
                 $tr.attr('class', 'terrapin-player-banker');
                 $tb.prepend($tr);
-            }
-            else $tb.append($tr);
+            } else $tb.append($tr);
         }// for
         $tb.prepend($('<tr><th>总</th><th>本</th><th></th><th></th><th></th><th></th></tr>'));
         $dv.append($tb);
@@ -265,21 +280,38 @@ var index = (function () {
 
     function send(action, data) {
         data.name = $name;
+        data.room = $room;
         stompClient.send(action, {}, JSON.stringify(data));
     }
 
-    self.login = function (name) {
+    self.login = function (name, room, code) {
         if (!name) {
-            alert('来者何人!');
-            return;
+            alert('来者何人！');
+            return false;
+        }
+        if (!room) {
+            alert('要去何方！');
+            return false;
+        }
+        if (!code) {
+            alert('接头暗号！');
+            return false;
         }
         $name = name;
+        $room = room;
 
-        send('/login', {});
+        send('/login', {'code': code});
 
-        $('#sp-name').html($name);
-        $('#fm-login').remove();
-        $('#dv-game').show(1000);
+        setTimeout(function () {
+            if (_login) {
+                $('#sp-name').html($name);
+                $('#sp-room').html($room);
+                $('#sp-code').html(code);
+                $('#fm-login').remove();
+                $('#dv-game').show(1000);
+                return true; // 已成功加入
+            } else return false;
+        }, 500);
     };
 
     self.logout = function () {

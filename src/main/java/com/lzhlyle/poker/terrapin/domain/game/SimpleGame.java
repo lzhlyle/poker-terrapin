@@ -10,19 +10,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class SimpleGame {
-    private static SimpleGame ourInstance = new SimpleGame();
-
-    public static SimpleGame getInstance() {
-        return ourInstance;
-    }
-
     private Banker banker;
     private List<Player> players;
     private PokerDealer dealer;
+    private final String code;
 
-    private SimpleGame() {
+    public SimpleGame(String code) {
         this.players = new LinkedList<>();
         this.dealer = PokerDealer.getInstance();
+        this.code = code;
     }
 
     public void start(String name) {
@@ -90,5 +86,9 @@ public class SimpleGame {
 
     public Banker getBanker() {
         return banker;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

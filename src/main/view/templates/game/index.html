@@ -15,7 +15,7 @@
             font-size: smaller;
         }
 
-        table.terrapin-players tr td,th {
+        table.terrapin-players tr td, th {
             text-align: center;
             padding: 5px;
         }
@@ -35,13 +35,20 @@
         <form class="form-inline" id="fm-login">
             <div class="form-group">
                 <input type="text" class="form-control" id="txt-name" placeholder="来者何人" autocomplete="off"
-                       maxlength="7" minlength="1">
+                       maxlength="8">
+                <input type="text" class="form-control" id="txt-room" placeholder="房号" autocomplete="off"
+                       maxlength="16">
+                <input type="text" class="form-control" id="txt-code" placeholder="邀请码" autocomplete="off"
+                       maxlength="8">
             </div>
             <input type="submit" class="btn btn-default" id="btn-login" value="躬身入局"/>
         </form>
     </div>
     <div id="dv-game" style="display: none" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h2><span id="sp-name"></span></h2>
+        <h2><span id="sp-name"></span> Go!</h2>
+        <div>
+            <p><span id="sp-code"></span> for <span id="sp-room"></span></p>
+        </div>
         <div>
             <button type="button" class="btn btn-default" id="btn-start">发牌走起</button>
             <button type="button" class="btn btn-default" id="btn-logout">下次再来</button>
@@ -88,8 +95,9 @@
         $('#txt-name').focus();
 
         $('#btn-login').click(function () {
-            index.login($('#txt-name').val());
-            $('#txt-msg').focus();
+            var success = index.login($('#txt-name').val().trim(), $('#txt-room').val().trim(), $('#txt-code').val().trim());
+            if (!!success) $('#txt-msg').focus();
+            return false; // 阻止页面提交事件
         });
 
         $('#btn-start').click(function () {
