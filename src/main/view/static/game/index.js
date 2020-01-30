@@ -39,6 +39,7 @@ var index = (function () {
                 var data = JSON.parse(response.body);
                 if (data.room === $room) {
                     refreshPlayers(data.players, data.banker);
+                    refreshObservers(data.observers);
                 }
             });
         });
@@ -246,6 +247,21 @@ var index = (function () {
                     return '哪来的猴子';
             }
         }
+    }
+
+    function refreshObservers(observers) {
+        var $dvOb = $('#dv-observers');
+        $dvOb.html('');
+        if (!observers) return;
+
+        var len = observers.length;
+        if (len < 1) return;
+
+        var str = '众人皆醉我独醒：';
+        for (var i = 0; i < len; i++) {
+            str += '@' + observers[i].name + ' ';
+        }
+        $dvOb.html(str);
     }
 
     self.bankerPassBelieve = function () {

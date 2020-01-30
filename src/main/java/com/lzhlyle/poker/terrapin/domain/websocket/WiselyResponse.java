@@ -2,6 +2,7 @@ package com.lzhlyle.poker.terrapin.domain.websocket;
 
 import com.lzhlyle.poker.terrapin.domain.game.AbstractPlayer;
 import com.lzhlyle.poker.terrapin.domain.game.Banker;
+import com.lzhlyle.poker.terrapin.domain.game.Observer;
 import com.lzhlyle.poker.terrapin.domain.game.SimpleMall;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class WiselyResponse {
     private String message;
     private Banker banker;
     private List<AbstractPlayer> players;
+    private List<Observer> observers;
 
     public WiselyResponse(String room, String name, String message) {
         this(room, name, message, false);
@@ -24,7 +26,12 @@ public class WiselyResponse {
         this.message = message;
         this.banker = SimpleMall.getInstance().intoRoom(room).getBanker();
         this.players = SimpleMall.getInstance().intoRoom(room).getAbstractPlayers();
+        this.observers = SimpleMall.getInstance().intoRoom(room).getObservers();
         this.isChat = isChat;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
     }
 
     public String getRoom() {
