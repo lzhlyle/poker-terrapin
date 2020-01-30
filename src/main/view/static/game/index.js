@@ -46,8 +46,8 @@ var index = (function () {
         function appendLog(name, txt) {
             if (!txt || !name) return;
 
-            var p = $('<p class="text-center text-gray"></p>');
-            p.html('<i>【' + name + '】' + txt + '</i>');
+            var p = $('<p class="text-center text-log"></p>');
+            p.html('【' + name + '】' + txt);
             $('#dv-log').prepend(p);
         }
 
@@ -75,11 +75,16 @@ var index = (function () {
 
         var $dv = $('#dv-players');
         $dv.html('');
-        var $tb = $('<table class="terrapin-players"></table>');
+        var $tb = $('<table class="table table-hover table-striped terrapin-tb"></table>');
         // name, score, round-score, cards, status/banker-count, operate,
         for (var i = 0, len = players.length; i < len; i++) {
             var $tr = $('<tr></tr>');
             var player = players[i];
+
+            if (player.name === $name) {
+                // 当前玩家
+                $tr.addClass('success');
+            }
 
             // score
             $tr.append(generateTd(player.score.value));
@@ -96,10 +101,8 @@ var index = (function () {
                 if (player.name === $name) {
                     var handCardStr = '您的手牌：' + player.handCardStr;
                     $('#dv-my').html('<h3>' + handCardStr + '</h3>');
-                    cardStr = player.handCardStr;
-                } else {
-                    cardStr = isDisplayHandCard(player.status) ? player.handCardStr : '{{?, ?}, {?, ?}}';
                 }
+                cardStr = isDisplayHandCard(player.status) ? player.handCardStr : '{{?, ?}, {?, ?}}';
             }
             $tr.append(generateTd(cardStr));
 
@@ -139,8 +142,7 @@ var index = (function () {
             $tr.append(generateTd4Arr(btns));
 
             if (!!banker && banker.name === player.name) {
-                // 庄家行
-                $tr.attr('class', 'terrapin-player-banker');
+                $tr.addClass('terrapin-player-banker');
                 $tb.prepend($tr);
             } else $tb.append($tr);
         }// for
@@ -192,7 +194,7 @@ var index = (function () {
         }
 
         function generateBankerBtn(id, txt, player) {
-            return $('<button type="button" class="btn btn-default terrapin-banker-btn" ' +
+            return $('<button type="button" class="btn btn-warning terrapin-banker-btn" ' +
                 'id="' + id + '" data-player="' + player + '">' + txt + '</button>');
         }
 
@@ -284,13 +286,13 @@ var index = (function () {
         stompClient.send(action, {}, JSON.stringify(data));
     }
 
-    self.login = function (name, room, code) {
+    self.login = function (name, room, code, isPlayer) {
         if (!name) {
             alert('来者何人！');
             return false;
         }
         if (!room) {
-            alert('要去何方！');
+            alert('去向何方！');
             return false;
         }
         if (!code) {
@@ -300,15 +302,19 @@ var index = (function () {
         $name = name;
         $room = room;
 
-        send('/login', {'code': code});
+        send('/login', {'code': code, 'isPlayer': isPlayer});
 
         setTimeout(function () {
             if (_login) {
                 $('#sp-name').html($name);
                 $('#sp-room').html($room);
                 $('#sp-code').html(code);
-                $('#fm-login').remove();
-                $('#dv-game').show(1000);
+
+                $('#dv-mall').remove();
+                $('#dv-room').slideDown(500);
+                if (isPlayer) $('#dv-game').slideDown(500);
+                $('#dv-display').slideDown(500);
+
                 return true; // 已成功加入
             } else return false;
         }, 500);

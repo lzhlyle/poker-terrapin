@@ -10,80 +10,109 @@
             margin-left: 5px;
         }
 
-        p.text-gray {
+        p.text-log {
             color: gray;
-            font-size: smaller;
+            font-size: x-small;
+            font-style: italic;
         }
 
-        table.terrapin-players tr td, th {
-            text-align: center;
-            padding: 5px;
-        }
-
-        table tr.terrapin-player-banker {
+        table.terrapin-tb tr.terrapin-player-banker {
             font-size: larger;
             font-weight: bolder;
+        }
+
+        table.terrapin-tb tr td {
+            vertical-align: middle;
+        }
+
+        .dv-room, .dv-game, .dv-display div, .dv-display form {
+            margin-bottom: 10px;
+        }
+
+        .dv-room-welcome span {
+            font-size: xx-large;
+            vertical-align: middle;
+        }
+
+        .dv-room-info span {
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-<div class="col-lg-3 col-md-3 col-sm-2"></div>
-<div class="container col-lg-6 col-md-6 col-sm-8 col-xs-12">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h1>Nanning Poker Terrapin</h1>
-        <form class="form-inline" id="fm-login">
+<div class="container
+        col-lg-offset-2 col-lg-8
+        col-md-offset-2 col-md-9
+        col-sm-offset-2 col-sm-9
+        col-xs-offset-0">
+    <h1>Nanning Poker Terrapin</h1>
+
+    <!-- 大厅区 -->
+    <div id="dv-mall">
+        <form id="fm-login">
             <div class="form-group">
-                <input type="text" class="form-control" id="txt-name" placeholder="来者何人" autocomplete="off"
-                       maxlength="8">
-                <input type="text" class="form-control" id="txt-room" placeholder="房号" autocomplete="off"
-                       maxlength="16">
-                <input type="text" class="form-control" id="txt-code" placeholder="邀请码" autocomplete="off"
+                <label for="txt-name">来者何人</label>
+                <input type="text" class="form-control" id="txt-name" placeholder="听口音不像本地人" autocomplete="off"
                        maxlength="8">
             </div>
-            <input type="submit" class="btn btn-default" id="btn-login" value="躬身入局"/>
+            <div class="form-group">
+                <label for="txt-room">去向何方</label>
+                <input type="text" class="form-control" id="txt-room" placeholder="天字一号已经满了" autocomplete="off"
+                       maxlength="8">
+            </div>
+            <div class="form-group">
+                <label for="txt-code">接头暗号</label>
+                <input type="text" class="form-control" id="txt-code" placeholder="隔墙有耳务必三思" autocomplete="off"
+                       maxlength="8">
+            </div>
+            <button type="submit" class="btn btn-success" id="btn-login">躬身入局</button>
+            <button type="submit" class="btn btn-default" id="btn-ob">旁观者清</button>
         </form>
     </div>
-    <div id="dv-game" style="display: none" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <h2><span id="sp-name"></span> Go!</h2>
-        <div>
-            <p><span id="sp-code"></span> for <span id="sp-room"></span></p>
-        </div>
-        <div>
-            <button type="button" class="btn btn-default" id="btn-start">发牌走起</button>
+
+    <!-- 房间区 -->
+    <div id="dv-room" style="display: none;" class="dv-room">
+        <div class="dv-room-welcome">
+            <span id="sp-name"></span> <span>Go!</span>
             <button type="button" class="btn btn-default" id="btn-logout">下次再来</button>
         </div>
-        <hr/>
+        <div class="dv-room-info">
+            <span>房号：<span id="sp-room"></span>，暗号：<span id="sp-code"></span></span>
+        </div>
+    </div>
 
+    <!-- 操作区 -->
+    <div id="dv-game" style="display: none" class="dv-game">
         <div id="dv-my"></div>
         <div>
-            <button type="button" class="btn btn-default" id="btn-adjust">摆牌</button>
+            <button type="button" class="btn btn-success" id="btn-start">发牌走起</button>
+            <button type="button" class="btn btn-primary" id="btn-adjust">摆牌</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-pass">求走</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-cover">盖牌</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-force">强攻</button>
-            <button type="button" class="btn btn-default terrapin-banker-btn" id="btn-open">庄家开牌</button>
-            <button type="button" class="btn btn-default" id="btn-win">赢得爽</button>
-            <button type="button" class="btn btn-default" id="btn-lose">输得起</button>
+            <button type="button" class="btn btn-warning terrapin-banker-btn" id="btn-open">庄家开牌</button>
+            <button type="button" class="btn btn-success" id="btn-win">赢得爽</button>
+            <button type="button" class="btn btn-danger" id="btn-lose">输得起</button>
         </div>
-        <hr/>
+    </div>
 
+    <!-- 显示区 -->
+    <div id="dv-display" style="display: none" class="dv-display">
         <div id="dv-players"></div>
-        <hr/>
 
         <form class="form-inline" id="fm-rec">
             <div class="form-group">
                 <input type="text" class="form-control" id="txt-msg" placeholder="说点儿什么" autocomplete="off"
                        maxlength="25">
             </div>
-            <input type="submit" class="btn btn-default" id="btn-msg" value="恭喜发财"/>
+            <input type="submit" class="btn btn-success" id="btn-msg" value="恭喜发财"/>
             <button type="button" class="btn btn-default" id="btn-clearLog">长岛冰茶</button>
         </form>
-        <hr/>
 
         <div id="dv-log"></div>
     </div>
 </div>
-<div class="col-lg-3 col-md-3 col-sm-2"></div>
 
 <script th:src="@{/js/jquery.js}" type="text/javascript"></script>
 <script th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.js}" type="text/javascript"></script>
@@ -95,7 +124,13 @@
         $('#txt-name').focus();
 
         $('#btn-login').click(function () {
-            var success = index.login($('#txt-name').val().trim(), $('#txt-room').val().trim(), $('#txt-code').val().trim());
+            var success = index.login($('#txt-name').val().trim(), $('#txt-room').val().trim(), $('#txt-code').val().trim(), true);
+            if (!!success) $('#txt-msg').focus();
+            return false; // 阻止页面提交事件
+        });
+
+        $('#btn-ob').click(function () {
+            var success = index.login($('#txt-name').val().trim(), $('#txt-room').val().trim(), $('#txt-code').val().trim(), false);
             if (!!success) $('#txt-msg').focus();
             return false; // 阻止页面提交事件
         });

@@ -28,7 +28,8 @@ public class GameController {
         String room = message.getRoom();
         SimpleGame game = SimpleMall.getInstance().intoRoom(room, message.getCode());
         if (game == null) return new WiselyResponse(room, name, null);
-        game.addPlayer(name);
+        if (message.isPlayer()) game.addPlayer(name);
+        else game.addObserver(name);
         return new WiselyResponse(room, name, "已加入");
     }
 
@@ -39,7 +40,8 @@ public class GameController {
         String room = message.getRoom();
         SimpleGame game = SimpleMall.getInstance().intoRoom(room);
         if (game == null) return new WiselyResponse(room, name, "找不到房间");
-        game.removePlayer(name);
+        if (message.isPlayer()) game.removePlayer(name);
+        else game.removeObserver(name);
         return new WiselyResponse(room, name, "已退出");
     }
 
@@ -51,7 +53,7 @@ public class GameController {
         SimpleGame game = SimpleMall.getInstance().intoRoom(room);
         if (game == null) return new WiselyResponse(room, name, "找不到房间");
         game.start(name);
-        return new WiselyResponse(room, name, "已发牌，牌局已开始 =========");
+        return new WiselyResponse(room, name, "已发牌，牌局已开始 ==============");
     }
 
     @MessageMapping("/adjust")

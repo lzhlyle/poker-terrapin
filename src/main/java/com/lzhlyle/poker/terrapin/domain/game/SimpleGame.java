@@ -12,11 +12,13 @@ import java.util.Objects;
 public class SimpleGame {
     private Banker banker;
     private List<Player> players;
+    private List<Observer> observers;
     private PokerDealer dealer;
     private final String code;
 
     public SimpleGame(String code) {
         this.players = new LinkedList<>();
+        this.observers = new LinkedList<>();
         this.dealer = PokerDealer.getInstance();
         this.code = code;
     }
@@ -61,11 +63,20 @@ public class SimpleGame {
         players.add(new Player(name, scoreVal));
     }
 
+    public void addObserver(String name) {
+        if (observers.stream().anyMatch(ob -> Objects.equals(ob.getName(), name))) return;
+        observers.add(new Observer(name));
+    }
+
     public AbstractPlayer removePlayer(String name) {
         AbstractPlayer player = findAbstractPlayer(name);
         if (player instanceof Player) players.remove(player);
         if (player instanceof Banker) banker = null;
         return player;
+    }
+
+    public boolean removeObserver(String name) {
+        return observers.removeIf(ob -> Objects.equals(ob.getName(), name));
     }
 
     public List<Player> getPlayers() {
@@ -90,5 +101,9 @@ public class SimpleGame {
 
     public String getCode() {
         return code;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
     }
 }

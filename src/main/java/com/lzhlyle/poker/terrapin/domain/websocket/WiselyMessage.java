@@ -6,6 +6,15 @@ public class WiselyMessage {
     private String name;
     private String msg;
     private String player;
+    private boolean isPlayer;
+
+    public boolean isPlayer() {
+        return isPlayer;
+    }
+
+    public void setIsPlayer(boolean isPlayer) {
+        this.isPlayer = isPlayer;
+    }
 
     public String getCode() {
         return code;
