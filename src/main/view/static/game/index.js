@@ -14,7 +14,11 @@ var index = (function () {
         stompClient.connect({}, function (frame) {
             stompClient.subscribe('/topic/log', function (response) {
                 var data = JSON.parse(response.body);
-                appendLog(data.name, data.message);
+                if (data.chat) {
+                    appendChat(data.name, data.message);
+                } else {
+                    appendLog(data.name, data.message);
+                }
             });
 
             stompClient.subscribe('/topic/players', function (response) {
@@ -24,6 +28,14 @@ var index = (function () {
         });
 
         function appendLog(name, txt) {
+            if (!txt || !name) return;
+
+            var p = $('<p class="text-center text-gray"></p>');
+            p.html('<i>【' + name + '】' + txt + '</i>');
+            $('#dv-log').prepend(p);
+        }
+
+        function appendChat(name, txt) {
             if (!txt || !name) return;
 
             var p = $('<p class="text-left"></p>');
@@ -40,63 +52,99 @@ var index = (function () {
         $playerBtns.show();
         $bankerBtns.hide();
         if (!!banker && banker.name === $name) {
+            // 当前庄家
             $playerBtns.hide();
             $bankerBtns.show();
         }
 
         var $dv = $('#dv-players');
         $dv.html('');
+        var $tb = $('<table class="terrapin-players"></table>');
+        // name, score, round-score, cards, status/banker-count, operate,
         for (var i = 0, len = players.length; i < len; i++) {
+            var $tr = $('<tr></tr>');
             var player = players[i];
-            var playerTxt = player.score.value + '【' + player.name + '】';
 
+            // score
+            $tr.append(generateTd(player.score.value));
+
+            // round-score
+            $tr.append(generateTd(player.score.curr));
+
+            // name
+            $tr.append(generateTd('【' + player.name + '】'));
+
+            // cards
+            var cardStr = '';
             if (!!player.handCardStr) {
                 if (player.name === $name) {
                     var handCardStr = '您的手牌：' + player.handCardStr;
                     $('#dv-my').html('<h3>' + handCardStr + '</h3>');
-                    playerTxt += player.handCardStr;
+                    cardStr = player.handCardStr;
                 } else {
-                    playerTxt += isDisplayHandCard(player.status) ? player.handCardStr : '{{?, ?}, {?, ?}}';
+                    cardStr = isDisplayHandCard(player.status) ? player.handCardStr : '{{?, ?}, {?, ?}}';
                 }
             }
+            $tr.append(generateTd(cardStr));
 
+            // status
             if (!!banker && banker.name === player.name) {
                 // 庄家行
-                var $b = $('<h4>' + playerTxt + ' ' + banker.count + '连庄' + '</h4>');
-                $dv.prepend($b);
+                $tr.append(generateTd(banker.count + '连庄'));
             } else {
                 // 闲家行
-                var $playerDv = $('<div></div>');
-                playerTxt += ' ' + getStatus(player.status);
-                $playerDv.append($('<span>' + playerTxt + '</span> '));
+                $tr.append(generateTd(getStatus(player.status)));
+            }
 
+            // operate
+            var btns = [];
+            if (!banker || banker.name !== player.name) {
+                // 闲家行
                 if (!!banker && banker.name === $name) {
                     // 庄家看
                     if (player.status === 'PLAYER_PASS') {
-                        $playerDv.append(generateBankerBtn('btn-banker-pass', '走过', player.name));
-                        $playerDv.append(generateBankerBtn('btn-banker-kill', '杀牌', player.name));
+                        btns.push(generateBankerBtn('btn-banker-pass', '走过', player.name));
+                        btns.push(generateBankerBtn('btn-banker-kill', '杀牌', player.name));
                     } else if (player.status === 'PLAYER_COVER') {
-                        $playerDv.append(generateBankerBtn('btn-banker-turnOver', '开牌', player.name));
-                        $playerDv.append(generateBankerBtn('btn-banker-notTurnOver', '不开', player.name));
+                        btns.push(generateBankerBtn('btn-banker-turnOver', '开牌', player.name));
+                        btns.push(generateBankerBtn('btn-banker-notTurnOver', '不开', player.name));
                     }
-                }
-
-                if (player.name === $name) {
+                } else if (player.name === $name) {
                     // 闲家看
                     if (player.status === 'PLAYER_PASS_BANKER_PASS') {
-                        $playerDv.append(generateBankerBtn('btn-player-pass-believe', '信咯', player.name));
-                        $playerDv.append(generateBankerBtn('btn-player-pass-not-believe', '信戳', player.name));
+                        btns.push(generateBankerBtn('btn-player-pass-believe', '信咯', player.name));
+                        btns.push(generateBankerBtn('btn-player-pass-not-believe', '不信', player.name));
                     } else if (player.status === 'PLAYER_PASS_BANKER_KILL') {
-                        $playerDv.append(generateBankerBtn('btn-player-kill-believe', '信咯', player.name));
-                        $playerDv.append(generateBankerBtn('btn-player-kill-not-believe', '信戳', player.name));
+                        btns.push(generateBankerBtn('btn-player-kill-believe', '信咯', player.name));
+                        btns.push(generateBankerBtn('btn-player-kill-not-believe', '不信', player.name));
                     }
                 }
-
-                $dv.append($playerDv);
             }
+            $tr.append(generateTd4Arr(btns));
+
+            if (!!banker && banker.name === player.name) {
+                // 庄家行
+                $tr.attr('class', 'terrapin-player-banker');
+                $tb.prepend($tr);
+            }
+            else $tb.append($tr);
         }// for
+        $tb.prepend($('<tr><th>总</th><th>本</th><th></th><th></th><th></th><th></th></tr>'));
+        $dv.append($tb);
 
         bindDynamicBankerBtnEvent();
+
+        function generateTd(html) {
+            return $('<td>' + html + '</td>');
+        }
+
+        function generateTd4Arr(arr) {
+            var $res = $('<td></td>');
+            for (var i = 0, len = arr.length; i < len; i++) {
+                $res.append(arr[i]);
+            }
+            return $res;
+        }
 
         function bindDynamicBankerBtnEvent() {
             // 庄家
@@ -283,4 +331,5 @@ var index = (function () {
     };
 
     return self;
-})();
+})
+();

@@ -28,6 +28,7 @@ public abstract class AbstractPlayer {
     // 接牌
     public void receive(List<PokerCard> cards) {
         this.handCard = new HandCardCollection(cards);
+        this.score.clearCurr();
     }
 
     // 摆牌
@@ -38,13 +39,13 @@ public abstract class AbstractPlayer {
     }
 
     // 加分
-    public void increaseScore(int increase) {
-        score.calcValue(increase);
+    public void increaseScore(int val) {
+        score.calcValue(val);
     }
 
     // 减分
-    public void decreaseScore(int decrease) {
-        score.calcValue(decrease * -1);
+    public void decreaseScore(int val) {
+        score.calcValue(val * -1);
     }
 
     public String getName() {
