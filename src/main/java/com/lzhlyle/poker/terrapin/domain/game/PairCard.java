@@ -49,9 +49,9 @@ public class PairCard {
 
     @Override
     public String toString() {
-        return "{" + a +
+        return "[" + a +
                 ", " + b +
-                '}';
+                ']';
     }
 
     public PokerCard getA() {

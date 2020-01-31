@@ -37,6 +37,15 @@
         .dv-room-info span {
             font-style: italic;
         }
+
+        #btn-start {
+            margin-bottom: 5px;
+        }
+
+        #sp-my {
+            font-size: x-large;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -84,9 +93,11 @@
 
     <!-- 操作区 -->
     <div id="dv-game" style="display: none" class="dv-game">
-        <div id="dv-my"></div>
         <div>
             <button type="button" class="btn btn-success" id="btn-start">发牌走起</button>
+            <span id="sp-my"></span>
+        </div>
+        <div>
             <button type="button" class="btn btn-primary" id="btn-adjust">摆牌</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-pass">求走</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-cover">盖牌</button>
@@ -107,10 +118,15 @@
                        maxlength="25">
             </div>
             <input type="submit" class="btn btn-success" id="btn-msg" value="平安喜乐"/>
+            <button type="button" class="btn btn-default" id="btn-log-change">分分合合</button>
             <button type="button" class="btn btn-default" id="btn-clearLog">长岛冰茶</button>
         </form>
 
         <div id="dv-log"></div>
+        <div style="width: 100%; display: none" id="dv-only">
+            <div id="dv-chat-only" style="width: 48%; float: left;"></div>
+            <div id="dv-log-only" style="width: 48%; float: right;"></div>
+        </div>
     </div>
 </div>
 
@@ -120,6 +136,7 @@
 <script th:src="@{/js/sockjs.min.js}" type="text/javascript"></script>
 <script th:src="@{/game/index.js}" type="text/javascript"></script>
 <script type="text/javascript">
+    var dvOnly = false;
     index.init(function () {
         $('#txt-name').focus();
 
@@ -153,6 +170,8 @@
 
         $('#btn-clearLog').click(function () {
             $('#dv-log').html('');
+            $('#dv-log-only').html('');
+            $('#dv-chat-only').html('');
         });
 
         // 操作
@@ -177,6 +196,17 @@
         });
         $('#btn-lose').click(function () {
             index.lose();
+        });
+        $('#btn-log-change').click(function () {
+            if (dvOnly) {
+                $('#dv-log').hide();
+                $('#dv-only').show();
+                dvOnly = false;
+            } else {
+                $('#dv-log').show();
+                $('#dv-only').hide();
+                dvOnly = true;
+            }
         });
     });
 </script>

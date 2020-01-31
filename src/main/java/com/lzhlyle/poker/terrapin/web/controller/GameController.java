@@ -6,6 +6,7 @@ import com.lzhlyle.poker.terrapin.domain.websocket.WiselyResponse;
 import com.lzhlyle.poker.terrapin.utility.TerrapinNotFoundPlayerException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +54,11 @@ public class GameController {
         SimpleGame game = SimpleMall.getInstance().intoRoom(room);
         if (game == null) return new WiselyResponse(room, name, "找不到房间");
         game.start(name);
-        return new WiselyResponse(room, name, "已发牌，牌局已开始 ==============");
+        return new WiselyResponse(room, name, "已发牌，牌局已开始 ========");
     }
 
     @MessageMapping("/adjust")
-    @SendTo({"/topic/log", "/topic/players"})
+    @SendToUser("/topic/player")
     public WiselyResponse adjust(WiselyMessage message) {
         String name = message.getName();
         String room = message.getRoom();

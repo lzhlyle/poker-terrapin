@@ -2,7 +2,6 @@ package com.lzhlyle.poker.terrapin.domain.game;
 
 import com.lzhlyle.poker.utility.card.PokerCard;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class HandCardCollection {
@@ -62,7 +61,7 @@ public class HandCardCollection {
 
     @Override
     public String toString() {
-        return "{" + head + ", " + tail + '}';
+        return head + " " + tail;
     }
 
     public PairCard getHead() {
