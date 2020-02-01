@@ -54,18 +54,51 @@ public class SimpleGame {
         return res;
     }
 
-    public void addPlayer(String name) {
-        addPlayer(name, 0);
+    public boolean addPlayer(String name) {
+        return addPlayer(name, 0);
     }
 
-    public void addPlayer(String name, int scoreVal) {
-        if (getAbstractPlayers().stream().anyMatch(p -> Objects.equals(p.getName(), name))) return;
+    public boolean addPlayer(String name, int scoreVal) {
+        if (getAbstractPlayers().stream().anyMatch(p -> Objects.equals(p.getName(), name))) return false;
         players.add(new Player(name, scoreVal));
+        return true;
     }
 
-    public void addObserver(String name) {
-        if (observers.stream().anyMatch(ob -> Objects.equals(ob.getName(), name))) return;
+    public boolean addObserver(String name) {
+        if (observers.stream().anyMatch(ob -> Objects.equals(ob.getName(), name))) return false;
         observers.add(new Observer(name));
+        return true;
+    }
+
+    public boolean changeToObserver(String name) {
+        AbstractPlayer ap = findAbstractPlayer(name);
+        if (ap == null) return false;
+
+        if (addObserver(name)) {
+            removePlayer(name);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changeToPlayer(String name) {
+        Observer ob = findObserver(name);
+        if (ob == null) return false;
+
+        AbstractPlayer original = ob.getOriginal();
+        if (original == null) {
+            if (addPlayer(name)) {
+                removeObserver(name);
+                return true;
+            }
+            return false;
+        }
+
+        if (addPlayer(original.getName(), original.getScore().getValue())) {
+            removeObserver(name);
+            return true;
+        }
+        return false;
     }
 
     public AbstractPlayer removePlayer(String name) {
@@ -93,6 +126,10 @@ public class SimpleGame {
 
     public Banker findBanker(String name) {
         return Objects.equals(banker.getName(), name) ? banker : null;
+    }
+
+    public Observer findObserver(String name) {
+        return observers.stream().filter(ob -> Objects.equals(ob.getName(), name)).findFirst().orElse(null);
     }
 
     public Banker getBanker() {

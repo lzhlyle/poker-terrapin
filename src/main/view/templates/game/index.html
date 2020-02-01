@@ -16,6 +16,10 @@
             font-style: italic;
         }
 
+        #dv-log p, #dv-only p {
+            padding: 5px;
+        }
+
         table.terrapin-tb tr.terrapin-player-banker {
             font-size: larger;
             font-weight: bolder;
@@ -98,7 +102,7 @@
             <span id="sp-my"></span>
         </div>
         <div>
-            <button type="button" class="btn btn-primary" id="btn-adjust">摆牌</button>
+            <button type="button" class="btn btn-primary" id="btn-adjust">摆放手牌</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-pass">求走</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-cover">盖牌</button>
             <button type="button" class="btn btn-default terrapin-player-btn" id="btn-force">强攻</button>
@@ -122,8 +126,8 @@
             <button type="button" class="btn btn-default" id="btn-clearLog">长岛冰茶</button>
         </form>
 
-        <div id="dv-log"></div>
-        <div style="width: 100%; display: none" id="dv-only">
+        <div id="dv-log" style="display: none;"></div>
+        <div style="width: 100%;" id="dv-only">
             <div id="dv-chat-only" style="width: 48%; float: left;"></div>
             <div id="dv-log-only" style="width: 48%; float: right;"></div>
         </div>
@@ -136,7 +140,7 @@
 <script th:src="@{/js/sockjs.min.js}" type="text/javascript"></script>
 <script th:src="@{/game/index.js}" type="text/javascript"></script>
 <script type="text/javascript">
-    var dvOnly = true;
+    var dvOnly = false;
     index.init(function () {
         $('#txt-name').focus();
 

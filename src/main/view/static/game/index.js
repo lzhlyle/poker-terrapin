@@ -19,10 +19,12 @@ var index = (function () {
                 stompClient.subscribe('/topic/login', function (response) {
                     var data = JSON.parse(response.body);
                     if (data.room === $room) {
-                        if (!data.message) {
-                            _login = false;
-                            alert('邀请码错误');
-                        } else _login = true;
+                        if (data.name === $name) {
+                            if (!data.message) {
+                                _login = false;
+                                alert('邀请码错误');
+                            } else _login = true;
+                        }
                     }
                 });
 
@@ -52,30 +54,34 @@ var index = (function () {
                     }
                 });
             });
+        }
 
-            function appendLog(name, txt) {
-                if (!txt || !name) return;
+        function appendLog(name, txt) {
+            if (!txt || !name) return;
 
-                var p = $('<p class="text-center text-log"></p>');
-                p.html('【' + name + '】' + txt);
-                $('#dv-log').prepend(p);
+            var p = $('<p class="text-center text-log"></p>');
+            p.html('【' + name + '】' + txt);
+            $('#dv-log').prepend(p);
 
-                var pl = $('<p class="text-left text-log"></p>');
-                pl.html('【' + name + '】' + txt);
-                $('#dv-log-only').prepend(pl);
-            }
+            var pl = $('<p class="text-left text-log"></p>');
+            pl.html('【' + name + '】' + txt);
+            $('#dv-log-only').prepend(pl);
+        }
 
-            function appendChat(name, txt) {
-                if (!txt || !name) return;
+        function appendChat(name, txt) {
+            if (!txt || !name) return;
 
-                var p = $('<p class="text-left"></p>');
-                p.html('【' + name + '】' + txt);
-                $('#dv-log').prepend(p);
+            var p = $('<p class="text-left"></p>');
+            if (name === $name) p.addClass('bg-success');
+            else p.addClass('bg-warning');
+            p.html('【' + name + '】' + txt);
+            $('#dv-log').prepend(p);
 
-                var po = $('<p class="text-left"></p>');
-                po.html('【' + name + '】' + txt);
-                $('#dv-chat-only').prepend(po);
-            }
+            var po = $('<p class="text-left"></p>');
+            if (name === $name) po.addClass('bg-success');
+            else po.addClass('bg-warning');
+            po.html('【' + name + '】' + txt);
+            $('#dv-chat-only').prepend(po);
         }
 
         function refreshMyCards(players) {
@@ -100,6 +106,13 @@ var index = (function () {
                 // 当前庄家
                 $playerBtns.hide();
                 $bankerBtns.show();
+                if (banker.status === 'WAITING') {
+                    $bankerBtns.removeClass('btn-default').addClass('btn-warning')
+                        .removeClass('disabled').prop('disabled', false);
+                } else {
+                    $bankerBtns.removeClass('btn-warning').addClass('btn-default')
+                        .addClass('disabled').prop('disabled', true);
+                }
             }
 
             var $dv = $('#dv-players');
@@ -113,6 +126,16 @@ var index = (function () {
                 if (player.name === $name) {
                     // 当前玩家
                     $tr.addClass('success');
+                    if (!banker || player.name !== banker.name) {
+                        // 当前闲家
+                        if (player.status === 'WAITING') {
+                            $playerBtns.removeClass('btn-default').addClass('btn-warning')
+                                .removeClass('disabled').prop('disabled', false);
+                        } else {
+                            $playerBtns.removeClass('btn-warning').addClass('btn-default')
+                                .addClass('disabled').prop('disabled', true);
+                        }
+                    }
                 }
 
                 // score
