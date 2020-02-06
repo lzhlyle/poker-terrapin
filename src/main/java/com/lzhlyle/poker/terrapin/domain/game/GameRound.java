@@ -1,6 +1,6 @@
 package com.lzhlyle.poker.terrapin.domain.game;
 
-import com.lzhlyle.poker.utility.dealer.PokerDealer;
+import com.lzhlyle.poker.core.dealer.PokerDealer;
 
 public class GameRound {
     private Game game;

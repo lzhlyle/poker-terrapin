@@ -1,7 +1,7 @@
 package com.lzhlyle.poker.terrapin.domain.game;
 
 import com.lzhlyle.poker.terrapin.domain.score.Score;
-import com.lzhlyle.poker.utility.card.PokerCard;
+import com.lzhlyle.poker.core.card.PokerCard;
 
 import java.util.List;
 

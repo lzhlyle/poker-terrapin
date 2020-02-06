@@ -3,9 +3,9 @@ package com.lzhlyle.poker.terrapin.domain;
 import com.lzhlyle.poker.terrapin.domain.game.AbstractPlayer;
 import com.lzhlyle.poker.terrapin.domain.game.Banker;
 import com.lzhlyle.poker.terrapin.domain.game.Player;
-import com.lzhlyle.poker.utility.card.PokerBox;
-import com.lzhlyle.poker.utility.card.PokerCard;
-import com.lzhlyle.poker.utility.dealer.PokerDealer;
+import com.lzhlyle.poker.core.card.PokerBox;
+import com.lzhlyle.poker.core.card.PokerCard;
+import com.lzhlyle.poker.core.dealer.PokerDealer;
 import org.junit.Test;
 
 import java.util.List;
