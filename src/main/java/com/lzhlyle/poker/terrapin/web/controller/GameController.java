@@ -22,6 +22,7 @@ public class GameController {
         return "game/index";
     }
 
+    // 进入房间
     @MessageMapping("/login")
     @SendTo({"/topic/log", "/topic/players", "/topic/login"})
     public WiselyResponse login(WiselyMessage message) {
@@ -34,6 +35,7 @@ public class GameController {
         return new WiselyResponse(room, name, "已加入");
     }
 
+    // 退出房间
     @MessageMapping("/logout")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse logout(WiselyMessage message) {
@@ -46,6 +48,7 @@ public class GameController {
         return new WiselyResponse(room, name, "已退出");
     }
 
+    // 庄家发牌
     @MessageMapping("/start")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse start(WiselyMessage message) {
@@ -57,6 +60,7 @@ public class GameController {
         return new WiselyResponse(room, name, "已发牌，牌局已开始 ========");
     }
 
+    // 摆牌
     @MessageMapping("/adjust")
     @SendToUser("/topic/player")
     public WiselyResponse adjust(WiselyMessage message) {
@@ -83,6 +87,7 @@ public class GameController {
         return new WiselyResponse(room, name, message.getMsg(), true);
     }
 
+    // 闲家求走
     @MessageMapping("/pass")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse pass(WiselyMessage message) {
@@ -99,6 +104,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家盖牌
     @MessageMapping("/cover")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse cover(WiselyMessage message) {
@@ -115,6 +121,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家强攻
     @MessageMapping("/force")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse force(WiselyMessage message) {
@@ -131,6 +138,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 庄家对闲家走过
     @MessageMapping("/banker/pass")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerPass(WiselyMessage message) {
@@ -153,6 +161,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家信走
     @MessageMapping("/banker/pass/believe")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerPassBelieve(WiselyMessage message) {
@@ -169,6 +178,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家不信走
     @MessageMapping("/banker/pass/not-believe")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerPassNotBelieve(WiselyMessage message) {
@@ -185,6 +195,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家信杀
     @MessageMapping("/banker/kill/believe")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerKillBelieve(WiselyMessage message) {
@@ -201,6 +212,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 闲家不信杀
     @MessageMapping("/banker/kill/not-believe")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerKillNotBelieve(WiselyMessage message) {
@@ -217,6 +229,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 庄家对闲家杀牌
     @MessageMapping("/banker/kill")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerKill(WiselyMessage message) {
@@ -239,6 +252,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 庄家对闲家开牌
     @MessageMapping("/banker/turn-over")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerTurnOver(WiselyMessage message) {
@@ -261,6 +275,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 庄家对闲家不开牌
     @MessageMapping("/banker/not-turn-over")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse bankerNotTurnOver(WiselyMessage message) {
@@ -283,6 +298,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
+    // 庄家开牌
     @MessageMapping("/open")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse open(WiselyMessage message) {
@@ -300,7 +316,7 @@ public class GameController {
         return new WiselyResponse(room, name, null);
     }
 
-
+    // 赢
     @MessageMapping("/win")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse win(WiselyMessage message) {
@@ -317,6 +333,7 @@ public class GameController {
         return new WiselyResponse(room, name, "计分 +1，总计 " + player.getScore().getValue());
     }
 
+    // 输
     @MessageMapping("/lose")
     @SendTo({"/topic/log", "/topic/players"})
     public WiselyResponse lose(WiselyMessage message) {
