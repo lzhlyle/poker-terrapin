@@ -61,4 +61,8 @@ public class PairCard {
     public PokerCard getB() {
         return b;
     }
+
+    public boolean isFish() {
+        return a.getValue() * b.getValue() == 0 || a.getValue() == b.getValue();
+    }
 }

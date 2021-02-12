@@ -10,12 +10,10 @@ public abstract class AbstractPlayer {
     private HandCardCollection handCard;
     private Game game;
     private Score score;
+    private boolean king;
 
     public AbstractPlayer(String name) {
-        this.name = name;
-        this.handCard = null;
-        this.game = null;
-        this.score = new Score(0);
+        this(name, 0);
     }
 
     public AbstractPlayer(String name, int scoreVal) {
@@ -23,6 +21,7 @@ public abstract class AbstractPlayer {
         this.handCard = null;
         this.game = null;
         this.score = new Score(scoreVal);
+        this.king = false;
     }
 
     // 接牌
@@ -78,7 +77,15 @@ public abstract class AbstractPlayer {
         this.game = game;
     }
 
+    public void refreshKing() {
+        king = handCard.isFish();
+    }
+
     public Score getScore() {
         return score;
+    }
+
+    public boolean getKing() {
+        return king;
     }
 }

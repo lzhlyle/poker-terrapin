@@ -152,7 +152,7 @@ var index = (function () {
                 $tr.append(generateTd(player.score.curr));
 
                 // name
-                $tr.append(generateTd('【' + player.name + '】'));
+                $tr.append(generateTd(formatName(player)));
 
                 // cards
                 var cardStr = '';
@@ -161,7 +161,7 @@ var index = (function () {
                         var handCardStr = '您的手牌：' + player.handCardStr;
                         $('#sp-my').html(handCardStr);
                     }
-                    cardStr = isDisplayHandCard(player.status) ? player.handCardStr : '[?, ?] [?, ?]';
+                    cardStr = isDisplayHandCard(player.status) ? formatCard(player) : '[?, ?] [?, ?]';
                 }
                 $tr.append(generateTd(cardStr));
 
@@ -262,6 +262,29 @@ var index = (function () {
                 });
 
                 return $btn;
+            }
+
+            function formatCard(player) {
+                var headA = player.handCard.head.a.value;
+                var headB = player.handCard.head.b.value;
+                var tailA = player.handCard.tail.a.value;
+                var tailB = player.handCard.tail.b.value;
+                if (fish(headA, headB) && fish(tailA, tailB)) {
+                    return player.handCardStr + ' 🐟🐟🐟';
+                }
+                return player.handCardStr;
+
+                function fish(a, b) {
+                    return a * b == 0 || a == b;
+                }
+            }
+
+            function formatName(player) {
+                var res = '【' + player.name + '】';
+                if (!!player.king) {
+                    return res + '🐠';
+                }
+                return res;
             }
 
             function isDisplayHandCard(status) {

@@ -42,7 +42,9 @@ public class SimpleGame {
         }
 
         List<AbstractPlayer> abstractPlayers = getAbstractPlayers();
+        boolean refreshKing = anyNewKing(abstractPlayers);
         for (AbstractPlayer player : abstractPlayers) {
+            if (refreshKing) player.refreshKing();
             player.receive(dealer.deal(pokerCards, 4));
         }
     }
@@ -142,5 +144,12 @@ public class SimpleGame {
 
     public List<Observer> getObservers() {
         return observers;
+    }
+
+    private boolean anyNewKing(List<AbstractPlayer> abstractPlayers) {
+        for (AbstractPlayer p : abstractPlayers) {
+            if (p.getHandCard() != null && p.getHandCard().isFish()) return true;
+        }
+        return false;
     }
 }

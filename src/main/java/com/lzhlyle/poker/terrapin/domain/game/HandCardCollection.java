@@ -75,4 +75,8 @@ public class HandCardCollection {
     public boolean isLock() {
         return isLock;
     }
+
+    public boolean isFish() {
+        return head.isFish() && tail.isFish();
+    }
 }
