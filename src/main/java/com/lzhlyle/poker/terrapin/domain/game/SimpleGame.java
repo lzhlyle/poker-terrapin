@@ -27,18 +27,24 @@ public class SimpleGame {
         List<PokerCard> pokerCards = new PokerBox().getCards();
         dealer.shuffle(pokerCards);
 
+
         if (banker != null && !Objects.equals(banker.getName(), name)) {
             // banker -> player
             String oriBankerName = banker.getName();
             int oriScoreVal = banker.getScore().getValue();
+            boolean oriKing = banker.getKing();
+            HandCardCollection oriHandCardCollection = banker.getHandCard();
             banker = null;
-            addPlayer(oriBankerName, oriScoreVal);
+            addPlayer(oriBankerName, oriScoreVal, oriHandCardCollection, oriKing);
         }
 
         if (banker == null) {
             // player -> banker
+            Player oriPlayer = findPlayer(name);
+            boolean oriKing = oriPlayer.getKing();
+            HandCardCollection oriHandCardCollection = oriPlayer.getHandCard();
             AbstractPlayer ab = removePlayer(name);
-            banker = new Banker(name, ab.getScore().getValue());
+            banker = new Banker(name, ab.getScore().getValue(), oriHandCardCollection, oriKing);
         }
 
         List<AbstractPlayer> abstractPlayers = getAbstractPlayers();
@@ -61,8 +67,12 @@ public class SimpleGame {
     }
 
     public boolean addPlayer(String name, int scoreVal) {
+        return addPlayer(name, scoreVal, null, false);
+    }
+
+    public boolean addPlayer(String name, int scoreVal, HandCardCollection oriHandCardCollection, boolean oriKing) {
         if (getAbstractPlayers().stream().anyMatch(p -> Objects.equals(p.getName(), name))) return false;
-        players.add(new Player(name, scoreVal));
+        players.add(new Player(name, scoreVal, oriHandCardCollection, oriKing));
         return true;
     }
 

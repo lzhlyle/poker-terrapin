@@ -20,6 +20,12 @@ public class Banker extends AbstractPlayer {
         this.count = 0;
     }
 
+    public Banker(String name, int scoreVal, HandCardCollection oriHandCardCollection, boolean oriKing) {
+        super(name, scoreVal, oriHandCardCollection, oriKing);
+        this.status = BankerStatusEnum.WAITING;
+        this.count = 0;
+    }
+
     public void round() {
         new GameRound(super.getGame()).start();
     }

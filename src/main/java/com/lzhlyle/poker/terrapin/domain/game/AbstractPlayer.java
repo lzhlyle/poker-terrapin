@@ -17,11 +17,15 @@ public abstract class AbstractPlayer {
     }
 
     public AbstractPlayer(String name, int scoreVal) {
+        this(name, scoreVal, null, false);
+    }
+
+    public AbstractPlayer(String name, int scoreVal, HandCardCollection oriHandCardCollection, boolean oriKing) {
         this.name = name;
-        this.handCard = null;
+        this.handCard = oriHandCardCollection;
         this.game = null;
         this.score = new Score(scoreVal);
-        this.king = false;
+        this.king = oriKing;
     }
 
     // 接牌
@@ -78,7 +82,7 @@ public abstract class AbstractPlayer {
     }
 
     public void refreshKing() {
-        king = handCard.isFish();
+        king = handCard != null && handCard.isFish();
     }
 
     public Score getScore() {

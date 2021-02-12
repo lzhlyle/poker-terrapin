@@ -12,8 +12,8 @@ public class Player extends AbstractPlayer {
         this.status = PlayerStatusEnum.WAITING;
     }
 
-    public Player(String name, int scoreVal) {
-        super(name, scoreVal);
+    public Player(String name, int scoreVal, HandCardCollection oriHandCardCollection, boolean oriKing) {
+        super(name, scoreVal, oriHandCardCollection, oriKing);
         this.status = PlayerStatusEnum.WAITING;
     }
 
