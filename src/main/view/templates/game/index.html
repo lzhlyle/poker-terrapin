@@ -212,6 +212,11 @@
                 dvOnly = true;
             }
         });
+
+        setTimeout(function () {
+            if (!!index.relogin())
+                $('#txt-msg').focus();
+        }, 500);
     });
 </script>
 </body>

@@ -6,6 +6,7 @@ var index = (function () {
         var _isPlayer = false;
         var stompClient = null;
         var _notice = [];
+        var storage = window.localStorage;
 
         self.init = function (fn) {
             connect();
@@ -410,6 +411,11 @@ var index = (function () {
                     if (isPlayer) $('#dv-game').slideDown(500);
                     $('#dv-display').slideDown(500);
 
+                    storage.name = name;
+                    storage.room = room;
+                    storage.code = code;
+                    storage.isPlayer = isPlayer;
+
                     return true; // 已成功加入
                 } else return false;
             }, 500);
@@ -418,8 +424,17 @@ var index = (function () {
         self.logout = function () {
             send('/logout', {'isPlayer': _isPlayer});
             disconnect();
+            storage.clear();
             location.reload();
         };
+
+        self.relogin = function () {
+            if (storage.name != null) {
+                var ok = self.login(storage.name, storage.room, storage.code, storage.isPlayer);
+                return ok
+            }
+            return false;
+        }
 
         function disconnect() {
             if (!stompClient) {
