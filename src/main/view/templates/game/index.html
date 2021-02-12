@@ -109,6 +109,8 @@
             <button type="button" class="btn btn-warning terrapin-banker-btn" id="btn-open">庄家开牌</button>
             <button type="button" class="btn btn-success" id="btn-win">赢得爽</button>
             <button type="button" class="btn btn-danger" id="btn-lose">输得起</button>
+            <button type="button" class="btn btn-default terrapin-banker-btn" id="btn-rescore">大赦天下</button>
+            <button type="button" class="btn btn-default" id="btn-unclear"></button>
         </div>
     </div>
 
@@ -201,6 +203,12 @@
         $('#btn-lose').click(function () {
             index.lose();
         });
+        $('#btn-rescore').click(function () {
+            index.rescore();
+        });
+        $('#btn-unclear').click(function () {
+            index.unclear();
+        }).hide();
         $('#btn-log-change').click(function () {
             if (dvOnly) {
                 $('#dv-log').hide();

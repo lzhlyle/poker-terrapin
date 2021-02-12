@@ -3,6 +3,7 @@ package com.lzhlyle.poker.terrapin.web.controller;
 import com.lzhlyle.poker.terrapin.domain.game.*;
 import com.lzhlyle.poker.terrapin.domain.websocket.WiselyMessage;
 import com.lzhlyle.poker.terrapin.domain.websocket.WiselyResponse;
+import com.lzhlyle.poker.terrapin.utility.TerrapinException;
 import com.lzhlyle.poker.terrapin.utility.TerrapinNotFoundPlayerException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class GameController {
@@ -348,5 +350,43 @@ public class GameController {
         player.decreaseScore(1);
 
         return new WiselyResponse(room, name, "计分 -1，总计 " + player.getScore().getValue());
+    }
+
+    // 记分清零
+    @MessageMapping("/rescore")
+    @SendTo({"/topic/log", "/topic/players"})
+    public WiselyResponse rescore(WiselyMessage message) {
+        String name = message.getName();
+        String room = message.getRoom();
+        SimpleGame game = SimpleMall.getInstance().intoRoom(room);
+        if (game == null) return new WiselyResponse(room, name, "找不到房间");
+        List<AbstractPlayer> players = game.getAbstractPlayers();
+        if (players == null)
+            return new WiselyResponse(room, name, new TerrapinNotFoundPlayerException("所有").getMesssage());
+
+        for (AbstractPlayer p : players) {
+            p.clearScore();
+        }
+
+        return new WiselyResponse(room, name, "清零了所有记分！点错了？赶紧撤销吧", false, true);
+    }
+
+    // 撤销记分清零
+    @MessageMapping("/unclear")
+    @SendTo({"/topic/log", "/topic/players"})
+    public WiselyResponse unclear(WiselyMessage message) {
+        String name = message.getName();
+        String room = message.getRoom();
+        SimpleGame game = SimpleMall.getInstance().intoRoom(room);
+        if (game == null) return new WiselyResponse(room, name, "找不到房间");
+        List<AbstractPlayer> players = game.getAbstractPlayers();
+        if (players == null)
+            return new WiselyResponse(room, name, new TerrapinNotFoundPlayerException("所有").getMesssage());
+
+        for (AbstractPlayer p : players) {
+            p.unClearScore();
+        }
+
+        return new WiselyResponse(room, name, "恢复了所有记分", false, false);
     }
 }

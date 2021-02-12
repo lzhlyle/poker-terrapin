@@ -15,6 +15,7 @@ public class WiselyResponse {
     private Banker banker;
     private List<AbstractPlayer> players;
     private List<Observer> observers;
+    private boolean unClearBtn;
 
     public WiselyResponse(String room, String name, String message) {
         this(room, name, message, false);
@@ -28,6 +29,12 @@ public class WiselyResponse {
         this.players = SimpleMall.getInstance().intoRoom(room).getAbstractPlayers();
         this.observers = SimpleMall.getInstance().intoRoom(room).getObservers();
         this.isChat = isChat;
+        this.unClearBtn = false;
+    }
+
+    public WiselyResponse(String room, String name, String message, boolean isChat, boolean unClearBtn) {
+        this(room, name, message, isChat);
+        this.unClearBtn = unClearBtn;
     }
 
     public List<Observer> getObservers() {
@@ -56,5 +63,9 @@ public class WiselyResponse {
 
     public boolean isChat() {
         return isChat;
+    }
+
+    public boolean isUnClearBtn() {
+        return unClearBtn;
     }
 }

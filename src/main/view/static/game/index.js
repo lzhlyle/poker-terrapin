@@ -38,6 +38,11 @@ var index = (function () {
                             appendLog(data.name, data.message);
                         }
                     }
+                    if (!!data.unClearBtn) {
+                        showUnClear();
+                    } else {
+                        hideUnClear();
+                    }
                 });
 
                 stompClient.subscribe('/topic/players', function (response) {
@@ -472,6 +477,39 @@ var index = (function () {
 
         self.lose = function () {
             send('/lose', {});
+        };
+
+        self.rescore = function () {
+            if (window.confirm('清空所有记分？')) {
+                send('/rescore', {});
+            }
+        };
+
+        var itv = null;
+
+        function showUnClear() {
+            var txt = '撤回清零';
+            $('#btn-unclear').text(txt);
+            $('#btn-unclear').show();
+
+            var i = 10;
+            if (!!itv) clearInterval(itv);
+            itv = setInterval(function () {
+                $('#btn-unclear').text(txt + '(' + i-- + ')');
+                if (i < 0) {
+                    hideUnClear();
+                }
+            }, 1000);
+        }
+
+        function hideUnClear() {
+            $('#btn-unclear').hide();
+            clearInterval(itv);
+        }
+
+        self.unclear = function () {
+            if (window.confirm('恢复所有记分？'))
+                send('/unclear', {});
         };
 
         self.msg = function (msg) {

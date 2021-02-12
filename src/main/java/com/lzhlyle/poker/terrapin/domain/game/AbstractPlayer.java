@@ -48,6 +48,16 @@ public abstract class AbstractPlayer {
         score.calcValue(val * -1);
     }
 
+    // 清分
+    public void clearScore() {
+        score.clear();
+    }
+
+    // 恢复清分
+    public void unClearScore() {
+        score.unClear();
+    }
+
     public String getName() {
         return name;
     }
